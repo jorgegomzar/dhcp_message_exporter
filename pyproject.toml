@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "dhcp-message-exporter"
+version = "0.1.0"
+description = "DHCP message exporter for Prometheus"
+authors = ["Jorge Gómez Zarzosa <jorge.gomzar@gmail.com>"]
+readme = "README.md"
+packages = [{include = "dhcp_message_exporter"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+scapy = "^2.6.0"
+prometheus-client = "^0.21.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff-lsp = "^0.0.57"
+pyright = "^1.1.384"
+ipdb = "^0.13.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
