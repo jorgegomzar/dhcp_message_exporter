@@ -6,6 +6,7 @@ RUN apt update && apt install libpcap-dev gcc -y
 
 COPY dhcp_message_exporter /src/dhcp_message_exporter
 COPY main.py /src/main.py
+COPY README.md /src/README.md
 
 COPY pyproject.toml /src/pyproject.toml
 COPY poetry.lock /src/poetry.lock
