@@ -38,3 +38,18 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:8000']  # or the port of your choice
 ```
+
+And in your rules, you can set an alert for rogue DHCP servers like this (replace `authorized_dhcp_ip1`, and `authorized_dhcp_ip2` with your known DHCP servers):
+```
+groups:
+  - name: DHCPAlerts
+    rules:
+    - alert: RogueDHCPServerDetected
+      expr: dhcp_offer_per_server_count > 0 and ignoring(server_ip) dhcp_offer_per_server_count unless (server_ip in ["authorized_dhcp_ip1", "authorized_dhcp_ip2"])
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Rogue DHCP Server Detected"
+        description: "A rogue DHCP server with IP {{ $labels.server_ip }} is detected on the network."
+```
