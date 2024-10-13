@@ -2,6 +2,8 @@
 
 This is a Python app that will sniff all DHCP traffic and serve an API for Prometheus to import data.
 
+For a Grafana set up using this exporter check my [grafana-dns-dhcp](https://github.com/jorgegomzar/grafana-dns-dhcp) repo
+
 ## Configuration
 
 You can change the port the exporter uses by defining this env variable `DHCP_MESSAGE_EXPORTER_PORT`.
