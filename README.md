@@ -7,6 +7,9 @@ This is a Python app that will sniff all DHCP traffic and serve an API for Prome
 You can change the port the exporter uses by defining this env variable `DHCP_MESSAGE_EXPORTER_PORT`.
 By default the exporter will try to listen port `8000`.
 
+You might need to set your network interface in promiscuous mode to be able to properly use the `dhcp_offer_per_server_count` metric 
+as an alarm for Rogue DHCP servers.
+
 ## Usage
 
 ```
