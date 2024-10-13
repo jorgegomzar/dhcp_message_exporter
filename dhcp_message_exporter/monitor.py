@@ -1,9 +1,10 @@
 import os
 import logging
 from enum import Enum
-from prometheus_client import start_http_server, Counter
+from prometheus_client import Gauge, start_http_server, Counter
 from scapy.all import sniff
 from scapy.layers.dhcp import DHCP
+from scapy.layers.inet import IP
 from scapy.layers.l2 import Ether
 from typing import Optional, Type, TypeVar
 
@@ -16,6 +17,7 @@ dhcp_request_counter = Counter('dhcp_request_total', 'Total number of DHCP Reque
 dhcp_ack_counter = Counter('dhcp_ack_total', 'Total number of DHCP Acknowledge messages')
 dhcp_nak_counter = Counter('dhcp_nak_total', 'Total number of DHCP NAK messages')
 dhcp_message_counter = Counter('dhcp_message_total', 'Total number of DHCP messages', ['message_type', 'source_mac', 'destination_mac'])
+dhcp_offer_per_server_count = Gauge('dhcp_offer_per_server_count', 'Count of DHCP offers per server', ['server_ip'])
 
 
 DEFAULT_DHCP_MESSAGE_EXPORTER_PORT = 8000
@@ -62,6 +64,10 @@ def handle_dhcp_packet(packet):
 
     if not (dhcp_type_enum := DHCPMessageType.get_by_type_int(dhcp_type)):
         return
+
+    if dhcp_type_enum == DHCPMessageType.OFFER:
+        dhcp_server_ip = packet[IP].src
+        dhcp_offer_per_server_count.labels(dhcp_server_ip).inc()
 
     dhcp_type_enum.prometheus_counter.inc()
     dhcp_message_counter.labels(
